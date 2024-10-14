@@ -1,0 +1,57 @@
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <div nz-row class="titleTable">
+      <div nz-col nzSpan="24">
+        <h1>Histórico de ventas La Q'Fresa</h1>
+      </div>
+    </div>
+    <nz-card>
+      <nz-table 
+        #ordersCompletedTable 
+        [nzData]="ordersCompleted" 
+        [nzLoading]="loadingHistoricSale"
+        [nzBordered]="true"
+        [nzScroll]="{ x: '200px', y: '300px' }">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Número de orden</th>
+            <th nzWidth="100px">Usuario</th>
+            <th nzWidth="100px">Fecha Creación</th>
+            <th nzWidth="100px">Total</th>
+            <th nzWidth="100px">Estado</th>
+            <th nzWidth="100px">Descuento</th>
+            <th nzWidth="90px" nzRight>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of ordersCompletedTable.data">
+            <td>{{ order.idOrder }}</td>
+            <td>{{ order.idUser }}</td>
+            <td>{{ order.creationDate }}</td>
+            <td>{{ order.total | currency }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.discount || 'Sin descuento' }}</td>
+            <td nzRight>
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <button
+                    nz-button
+                    (click)="showModal(order)">
+                    <span nz-icon nzType="eye" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+              </div>
+            </td> 
+          </tr>
+        </tbody>
+      </nz-table>  
+    </nz-card>
+  </div>
+</div>
+
+<app-modal-info-historic-sale
+*ngIf="isvisibleModal"
+[isVisible]="isvisibleModal"
+[ordersCompleted]="historicSaleModal"
+(hideModalEmitter)="hideModalInfo($event)">
+</app-modal-info-historic-sale>

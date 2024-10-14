@@ -1,0 +1,139 @@
+<nz-card *ngIf="product" style="margin-bottom:10px ;">
+  <div nz-row>
+    <div nz-col nzSpan="24" class="containerName">
+      <span class="nameProduct">
+        {{ product.name ? product.name : '---'}} ({{ product.sizeMap }})
+      </span>
+      <nz-statistic
+      style="display: flex;"
+      [nzValue]="( product.price | number)!"
+      [nzPrefix]="'$'"
+      [nzValueStyle]="{ color: '#3F8600' }"
+      ></nz-statistic>
+    </div>
+  </div>
+  <form nz-form [formGroup]="productForm">
+    <div nz-row nzGutter="16">
+      <div nz-col [nzSpan]="product.isCombo ? '24' : '18' ">
+        <nz-form-item>
+          <nz-form-label nzSpan="24" nzRequired>
+            Nombre del cliente
+          </nz-form-label>
+          <nz-form-control nzSpan="24" nzHasFeedback [nzErrorTip]="ErrorTipName">
+            <input
+            nz-input 
+            type="text"
+            formControlName="customerName"
+            (blur)="isTouchedInput('customerName')">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6" *ngIf="!product.isCombo">
+        <nz-form-item>
+          <nz-form-label nzSpan="24" nzRequired>
+            Cantidad
+          </nz-form-label>
+          <nz-form-control nzSpan="24" [nzErrorTip]="ErrorTipQuantity">
+            <input
+            nz-input 
+            type="number"
+            formControlName="quantity">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-card>
+<!-- TPOPINGS PREMIUM -->
+<nz-card style="margin-bottom:10px ;" [nzLoading]="loadingToppings" *ngIf="product.quantityToppingsPremium > 0">
+  <span class="nameProduct">
+    Toppings premium ({{ product.quantityToppingsPremium }})
+  </span>
+  <div nz-row>
+    <div nz-col nzSpan="12" *ngFor="let topping of toppingsPremium">
+      <label nz-checkbox
+      [(ngModel)]="topping.checked"
+      (ngModelChange)="onToppingPremiumChange(topping, $event)"
+      [nzDisabled]="toppingsPremiumAdd.length >= product.quantityToppingsPremium && !topping.checked ? true : false">
+        {{ topping.name }}
+      </label>
+    </div>
+  </div>
+</nz-card>
+<!-- TPOPINGS CLÁSICOS -->
+<nz-card style="margin-bottom:10px ;" [nzLoading]="loadingToppings" *ngIf="product.quantityToppingsClasic > 0 ">
+  <span class="nameProduct">
+    Toppings clásicos ({{ product.quantityToppingsClasic }})
+  </span>
+  <div nz-row>
+    <div nz-col nzSpan="12" *ngFor="let topping of toppingsClasic">
+      <label nz-checkbox
+      [(ngModel)]="topping.checked"
+      (ngModelChange)="onToppingClasicChange(topping, $event)"
+      [nzDisabled]="toppingsClasicAdd.length >= product.quantityToppingsClasic && !topping.checked ? true : false">
+        {{ topping.name }}
+      </label>
+    </div>
+  </div>
+</nz-card>
+<!-- SALSAS -->
+<nz-card style="margin-bottom:10px ;" [nzLoading]="loadingToppings" *ngIf="product.quantitySauces > 0 ">
+  <span class="nameProduct">
+    Salsas ({{ product.quantitySauces }})
+  </span>
+  <div nz-row>
+    <div nz-col nzSpan="12" *ngFor="let topping of sauces">
+      <label nz-checkbox
+      [(ngModel)]="topping.checked"
+      (ngModelChange)="onSaucesChange(topping, $event)"
+      [nzDisabled]="saucesAdd.length >= product.quantitySauces && !topping.checked ? true : false">
+        {{ topping.name }}
+      </label>
+    </div>
+  </div>
+</nz-card>
+<!-- ADICIONALES -->
+<nz-card style="margin-bottom:10px ;" [nzLoading]="loadingToppings" *ngIf="product ">
+  <span class="nameProduct">
+    Adicionales
+  </span>
+  <nz-select
+  style="width: 100%;"
+  nzMode="tags"
+  nzShowSearch
+  nzPlaceHolder="Buscar toppings"
+  [(ngModel)]="adicionalesAdd"
+  [nzShowArrow]="false"
+  (nzOnSearch)="search($event)"
+  >
+    <nz-option *ngFor="let topping of adicionales" [nzLabel]="topping.name" [nzValue]="topping"></nz-option>
+  </nz-select>
+  <span class="nameProduct">
+    Observación
+  </span>
+  <textarea nz-input [(ngModel)]="observation" [nzAutosize]="true" placeholder="Agrega una observación de ser necesario"></textarea>
+</nz-card>
+<div nz-row  *ngIf="product ">
+  <div class="containerBtnToppings" nz-col nzSpan="24">
+    <button
+    nz-button
+    (click)="cancelOrSaveProduct()">
+      Cancelar
+    </button>
+    <button
+    nz-button
+    class="btnAcceptToppings"
+    [disabled]="productForm.invalid"
+    (click)="addProductsOfOrder(product, product.isCombo)">
+      Aceptar toppings
+    </button>
+  </div>
+</div>
+
+<ng-template #ErrorTipName>
+  <p *ngIf="productForm.controls['customerName'].hasError('required')">El nombre del cliente es requerido</p>
+  <p *ngIf="productForm.controls['customerName'].hasError('minlength')">El nombre del cliente debe tener mínimo 3 caracteres</p>
+</ng-template>
+<ng-template #ErrorTipQuantity>
+  <p>La cantidad es requerida</p>
+</ng-template>

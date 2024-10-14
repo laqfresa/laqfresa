@@ -1,0 +1,9 @@
+
+.nameProduct {
+  font-size: large;
+  color: var(--color-neutral-black);
+}
+
+.collapse {
+  background-color: var(--color-primary-blue);
+}

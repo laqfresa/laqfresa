@@ -1,0 +1,142 @@
+<nz-card style="margin-bottom: 20%;">
+  <div nz-row>
+    <div 
+    nz-col
+    class="buttonResume"
+    nzSpan="24">
+      <button
+      nz-button
+      nzType="primary"
+      [disabled]="resumeOrder ? false : true"
+      (click)="showModal()">
+        Resumen pedido
+      </button>
+    </div>
+  </div>
+  <div nz-row>
+    <div
+    nz-col
+    nzSpan="24"
+    >
+      <nz-tabset nzType="card" [(nzSelectedIndex)]="selectedIndex">
+        <nz-tab [nzTitle]="titleTemplate" [nzDisabled]="!blockTabToppings || selectedIndex === 2 || isCombo">
+          <ng-template #titleTemplate>
+            <span nz-icon nzType="coffee"></span>
+           Productos
+          </ng-template>
+          <div nz-row>
+            <div nz-col nzSpan="24" *ngIf="loadingProducts">
+              <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24">
+                <app-loading-box [loadingText]="'Cargando'"></app-loading-box> 
+              </div>
+            </div>
+            <div nz-col nzSpan="24" *ngIf="!loadingProducts">
+              <nz-card style="margin-bottom:10px ;" *ngFor="let product of productsMap">
+                <div nz-row nzGutter="16">
+                  <div nz-col nzSpan="20">
+                    <div nz-row>
+                      <div nz-col nzSpan="24">
+                        <span class="nameProduct">
+                          {{ product.name }}
+                        </span>
+                        <span class="nameProduct">
+                          ({{ product.sizeMap }} Oz)
+                        </span>
+                      </div>
+                      <div nz-col nzSpan="24">
+                        <span>
+                          {{ product.quantityToppingsPremium > 0 ? product.quantityToppingsPremium + ' Topping premium' : null }}
+                          - {{ product.quantityToppingsClasic > 0 ? product.quantityToppingsClasic + ' Topping clásico' : null}}
+                          - {{ product.quantitySauces > 0 ? product.quantitySauces + ' Salsa' : null}}
+                        </span>
+                      </div>
+                      <div nz-col nzSpan="24">
+                        <nz-statistic
+                        [nzValue]="( product.price | number)!"
+                        [nzPrefix]="'$'"
+                        [nzValueStyle]="{ color: '#3F8600' }"
+                        ></nz-statistic>
+                      </div>
+                    </div>
+                  </div>
+                  <div nz-col nzSpan="4" style="display: flex; align-items: center;"> 
+                    <button 
+                    nz-button
+                    nzType="primary"
+                    style="background: none;"
+                    (click)="addProduct(product)">
+                    <span nz-icon nzType="plus-circle" nzTheme="twotone" nzTwotoneColor="#3F8600" style="font-size: 24px;"></span>
+                    </button>
+                  </div>
+                </div>
+              </nz-card>
+            </div>
+          </div>
+        </nz-tab>
+        <!-- COMBOS -->
+        <nz-tab [nzTitle]="titleCombos" [nzDisabled]="loadingCombos || selectedIndex === 2 || isProduct">
+          <ng-template #titleCombos>
+            <span nz-icon nzType="group" nzTheme="outline"></span>
+           Combos
+          </ng-template>
+          <app-tab-combos
+          [combosActive]="combosActive"
+          [comboIniciado]="comboIniciado"
+          [comboEnd]="comboEnd"
+          (intexTab)="selectedIndex = $event"
+          (productEmiter)="addProduct($event)"
+          (comboSelectedEmit)="comboSelected = $event">
+          </app-tab-combos>
+        </nz-tab>
+        <!-- TOPPINGS -->
+        <nz-tab [nzTitle]="titleToppings" [nzDisabled]="blockTabToppings">
+          <ng-template #titleToppings>
+            <span nz-icon nzType="shop"></span>
+           Toppings
+          </ng-template>
+          <app-tab-toppings
+          *ngIf="renderToppings"
+          [product]="productSendTab"
+          [isCombo]="isCombo"
+          [comboIniciado]="comboIniciado"
+          (blockTabToppings)="blockTabToppings = $event"
+          (selectedIndex)="selectedIndex = $event"
+          (resumeOrder)="createResumeOrder($event)"
+          (resumeOrderCombo)="createResumeOrderCombo($event)"
+          (nameCustomer)="customerName = $event"
+          (changeCombo)="changeType($event)"
+          (isComboEmitter)="isCombo = $event"
+          (isProductEmiter)="isProduct = $event"
+          (observationEmit)="observation = $event"
+          (toppingsPremiumAddEmit)="setToppingsPremium($event)"
+          (toppingsClasicAddEmit)="setToppingsClasic($event)"
+          (saucesAddEmit)="setSauces($event)"
+          (adicionalesAddEmit)="setAdicionales($event)">
+          </app-tab-toppings>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+  <app-modal-resume-order
+  *ngIf="isVisibleModal "
+  [isVisible]="isVisibleModal"
+  [resumeOrder]="resumeOrder"
+  [okOrder]="okOrder"
+  (hideModalEmiter)="hideModal($event)"
+  (deleteProductEmitter)="deleteProductOfOrder($event)"
+  (editProductEmitter)="editProdut($event)"
+  (resetVariablesEmit)="resetVariables($event)">
+  </app-modal-resume-order>
+</nz-card>
+
+<app-modal-edit-product
+*ngIf="visibleModalEdit"
+[isVisebleModal]="visibleModalEdit"
+[productOfEdit]="productOfEdit"
+[toppingsPremiumAdd]="toppingsPremiumAdd"
+[toppingsClasicAdd]="toppingsClasicAdd"
+[saucesAdd]="saucesAdd"
+[adicionalesAdd]="adicionalesAdd"
+(hidenModalEmitter)="hideModalEdit()"
+(saveChangesEmi)="saveChangesEdit($event)">
+</app-modal-edit-product>

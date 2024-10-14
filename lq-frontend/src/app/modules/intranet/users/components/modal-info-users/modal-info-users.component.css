@@ -1,0 +1,22 @@
+.btnOk {
+  width: 150px;
+  height: 45px;
+}
+
+.cardInfo {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: var(--color-neutral-gray-light);
+}
+
+h3 {
+  color: var(--color-primary-blue-ash);
+}
+
+span {
+  color: black;
+}
+
+.value {
+  color: var( --color-secondary-green-base);
+}

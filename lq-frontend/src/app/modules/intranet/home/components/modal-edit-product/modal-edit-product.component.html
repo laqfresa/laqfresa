@@ -1,0 +1,156 @@
+<nz-modal
+[(nzVisible)]="isVisebleModal"
+nzCentered
+[nzClosable]="false"
+nzWidth="95%"
+(nzOnCancel)="hideModal()">
+  <ng-container *nzModalContent>
+    <form [formGroup]="productForm">
+      <div nz-row nzGutter="16">
+        <div nz-col nzSpan=18 >
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Nombre del cliente
+            </nz-form-label>
+            <nz-form-control nzSpan="24" nzHasFeedback>
+              <input
+              nz-input 
+              type="text"
+              formControlName="nameCustomer">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Cantidad
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <input
+              nz-input 
+              type="number"
+              formControlName="quantity">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Toppings premium  max ({{ productOfEdit.quantityToppingsPremium }} )
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <nz-select
+                style="width: 100%;"
+                [nzMaxMultipleCount]="productOfEdit.quantityToppingsPremium"
+                nzMode="tags"
+                nzShowSearch
+                nzPlaceHolder="Buscar toppings"
+                formControlName="premiums"
+                [nzShowArrow]="false"
+                [compareWith]="compareToppings"
+              >
+                <nz-option *ngFor="let topping of toppingsPremiumAdd" [nzLabel]="topping.name" [nzValue]="topping"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Toppings clásicos max( {{ productOfEdit.quantityToppingsClasic }} )
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <nz-select
+                style="width: 100%;"
+                [nzMaxMultipleCount]="productOfEdit.quantityToppingsClasic"
+                nzMode="tags"
+                nzShowSearch
+                nzPlaceHolder="Buscar toppings"
+                formControlName="clasic"
+                [nzShowArrow]="false"
+                [compareWith]="compareToppings"
+              >
+                <nz-option *ngFor="let topping of toppingsClasicAdd" [nzLabel]="topping.name" [nzValue]="topping"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Salsas
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <nz-select
+                style="width: 100%;"
+                [nzMaxMultipleCount]="productOfEdit.quantitySauces"
+                nzMode="tags"
+                nzShowSearch
+                nzPlaceHolder="Buscar toppings"
+                formControlName="sauces"
+                [nzShowArrow]="false"
+                [compareWith]="compareToppings"
+              >
+                <nz-option *ngFor="let topping of saucesAdd" [nzLabel]="topping.name" [nzValue]="topping"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Adicionales
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <nz-select
+                style="width: 100%;"
+                nzMode="tags"
+                nzShowSearch
+                nzPlaceHolder="Buscar toppings"
+                formControlName="adicionales"
+                [nzShowArrow]="false"
+                [compareWith]="compareToppings"
+                (ngModelChange)="chageAditional($event)"
+              >
+                <nz-option *ngFor="let topping of adicionalesAdd" [nzLabel]="topping.name" [nzValue]="topping"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" nzRequired>
+              Observación
+            </nz-form-label>
+            <nz-form-control nzSpan="24">
+              <textarea nz-input formControlName="observation" [nzAutosize]="true" placeholder="Agrega una observación de ser necesario"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container *nzModalFooter>
+    <div nz-row nzGutter="16" class="containerBtns">
+      <div nz-col>
+        <button
+        nz-button
+        nz-popconfirm
+        (click)="hideModal()">
+          Cancelar
+        </button>
+      </div>
+      <div nz-col>
+        <button
+        nz-button
+        [disabled]="productForm.invalid"
+        nzType="primary"
+        nz-popconfirm
+        (click)="saveChanges()">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
