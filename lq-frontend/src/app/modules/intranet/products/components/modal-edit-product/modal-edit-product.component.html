@@ -1,0 +1,281 @@
+<nz-modal
+[nzVisible]="isVisible"
+[nzTitle]="titleModal"
+nzCentered
+nzWidth="100%"
+[nzClosable]="false">
+  <ng-container *nzModalContent="">
+    <div nz-row nzSpan="24" *ngIf="loadingUpdate">
+      <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24">
+        <app-loading-box [loadingText]="'Cargando'"></app-loading-box> 
+      </div>
+    </div>
+    <form [formGroup]="editForm" *ngIf="!loadingUpdate">
+      <div nz-row nzGutter="16">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="name">Nombre</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="name"
+              name="name" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="description">Descripción</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="description"
+              name="description" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>        
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="value">Precio</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-input-number  
+              formControlName="value"
+              name="value" 
+               ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantClasic">Cant. Clásicos</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-input-number 
+              formControlName="cantClasic"
+              name="cantClasic" 
+               ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantPremium">Cant. Premium</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-input-number  
+              formControlName="cantPremium"
+              name="cantPremium" 
+               ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Cant. Salsas</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-input-number 
+              formControlName="cantSauces"
+              name="cantSauces" 
+               ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Tamaño (Oz)</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              formControlName="size"
+              >
+                <nz-option *ngFor="let item of sizes" [nzLabel]="item.size" [nzValue]="item.idTamanio"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- Premiums -->
+        <div nz-col nzSpan="18">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Premiums</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              [nzMaxMultipleCount]="1"
+              nzMode="tags"
+              formControlName="premium"
+              >
+                <nz-option *ngFor="let item of premiums" [nzLabel]="item.name" [nzValue]="item.ingredientId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="premiumCantAdd">Cant</nz-form-label>
+              <nz-form-control [nzSpan]="24">
+                <nz-input-number formControlName="premiumCantAdd" [nzMin]="1"></nz-input-number>
+              </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24" class="centerContent">
+          <button
+          nz-button
+          nzType="primary"
+          style="margin-bottom: 10px; width: 100px;"
+          [disabled]="!editForm.controls['premium'].value  || !editForm.controls['premiumCantAdd'].value"
+          (click)="addIngredient('premium','premiumCantAdd')">
+            <span nz-icon nzType="plus-square" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="toPremiums.length > 0">
+          <nz-card>
+            <nz-tag *ngFor="let premium of toPremiums" nzMode="closeable" (nzOnClose)="removeIngredient(premium.idIngredient)"> {{ premium.quantity }} {{ premium.name }} </nz-tag>
+          </nz-card>
+        </div>
+        <!-- Clásicos -->
+        <div nz-col nzSpan="18">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Clásicos</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              [nzMaxMultipleCount]="1"
+              nzMode="tags"
+              formControlName="clasics"
+              >
+                <nz-option *ngFor="let item of tClasics" [nzLabel]="item.name" [nzValue]="item.ingredientId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Cant</nz-form-label>
+              <nz-form-control [nzSpan]="24">
+                <nz-input-number formControlName="clasicsCantAdd" [nzMin]="1"></nz-input-number>
+              </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24" class="centerContent">
+          <button
+          nz-button
+          nzType="primary"
+          style="margin-bottom: 10px; width: 100px;"
+          [disabled]="!editForm.controls['clasics'].value  || !editForm.controls['clasicsCantAdd'].value"
+          (click)="addIngredient('clasics','clasicsCantAdd')">
+            <span nz-icon nzType="plus-square" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="toClasics.length > 0">
+          <nz-card>
+            <nz-tag *ngFor="let clasic of toClasics" nzMode="closeable" (nzOnClose)="removeIngredient(clasic.idIngredient)"> {{ clasic.quantity }} {{ clasic.name }} </nz-tag>
+          </nz-card>
+        </div>
+        <!-- Salsas -->
+        <div nz-col nzSpan="18">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="cantSauces">Salsas</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              [nzMaxMultipleCount]="1"
+              nzMode="tags"
+              formControlName="sauces"
+              >
+                <nz-option *ngFor="let item of sauces" [nzLabel]="item.name" [nzValue]="item.ingredientId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="saucesCantAdd">Cant</nz-form-label>
+              <nz-form-control [nzSpan]="24">
+                <nz-input-number formControlName="saucesCantAdd" [nzMin]="1"></nz-input-number>
+              </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24" class="centerContent">
+          <button
+          nz-button
+          nzType="primary"
+          style="margin-bottom: 10px; width: 100px;"
+          [disabled]="!editForm.controls['sauces'].value  || !editForm.controls['saucesCantAdd'].value"
+          (click)="addIngredient('sauces','saucesCantAdd')">
+            <span nz-icon nzType="plus-square" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="toSauces.length > 0">
+          <nz-card>
+            <nz-tag *ngFor="let sauce of toSauces" nzMode="closeable" (nzOnClose)="removeIngredient(sauce.idIngredient)"> {{ sauce.quantity }} {{ sauce.name }} </nz-tag>
+          </nz-card>
+        </div>
+        <!-- Salsas -->
+        <div nz-col nzSpan="18">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="capas">Capas</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              [nzMaxMultipleCount]="1"
+              nzMode="tags"
+              formControlName="capas"
+              >
+                <nz-option *ngFor="let item of capas" [nzLabel]="item.name" [nzValue]="item.ingredientId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="capasCantAdd">Cant</nz-form-label>
+              <nz-form-control [nzSpan]="24">
+                <nz-input-number formControlName="capasCantAdd" [nzMin]="1"></nz-input-number>
+              </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24" class="centerContent">
+          <button
+          nz-button
+          nzType="primary"
+          style="margin-bottom: 10px; width: 100px;"
+          [disabled]="!editForm.controls['capas'].value  || !editForm.controls['capasCantAdd'].value"
+          (click)="addIngredient('capas','capasCantAdd')">
+            <span nz-icon nzType="plus-square" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="toCapas.length > 0">
+          <nz-card>
+            <nz-tag *ngFor="let capa of toCapas" nzMode="closeable" (nzOnClose)="removeIngredient(capa.idIngredient)"> {{ capa.quantity }} {{ capa.name }} </nz-tag>
+          </nz-card>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <!-- BOTONES MODAL -->
+  <ng-container *nzModalFooter>
+    <div nz-row style="display: flex; justify-content: space-around;">
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary"
+        [disabled]="loadingUpdate"
+        (click)="hideModal()">
+        Cancelar
+      </button>
+      </div>
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary"
+        (click)="updateProduct()"
+        [disabled]="detailProd.length <= 0 || loadingUpdate">
+        Aceptar
+      </button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-template #titleModal>
+  <span style="font-size: 24px; color: white;">
+    Editar producto # {{ productEdit.idProduct }}
+  </span>
+</ng-template>

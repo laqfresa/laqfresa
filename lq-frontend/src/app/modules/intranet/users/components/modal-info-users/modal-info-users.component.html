@@ -1,0 +1,45 @@
+<nz-modal
+  [nzVisible]="isVisible"
+  [nzTitle]="titleModal"
+  nzCentered
+  nzClosable="false">
+  <ng-container *nzModalContent="">
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <h2>{{ getFullName(users) }}</h2>
+      </div>
+      <nz-card class="cardInfo" nz-col nzSpan="24">
+        <div nz-row nzGutter="12">
+          <div nz-col nzSpan="12">
+            <h3>Tipo de Documento: <span>{{ users.documentTypeId.name }}</span></h3>
+            <h3>Número de Documento: <span class="value">{{ users.documentNumber }}</span></h3>
+            <h3>Género: <span>{{ users.gender.name }}</span></h3>
+            <h3>Tipo de Usuario: <span>{{ users.userType.name }}</span></h3>
+          </div>
+          <div nz-col nzSpan="10">
+            <h3>Correo Electrónico: <span>{{ users.email }}</span> </h3>
+            <h3>Estado: <span>{{ users.userStatus.name }}</span></h3>
+            <h3>Teléfono: <span>{{ users.phone }}</span></h3>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <div nz-row class="centerContent">
+      <button
+        class="btnOk"
+        nz-button
+        nzType="primary"
+        (click)="hideModalEmit()">
+        OK
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-template #titleModal>
+  <span style="font-size: 24px; color: white;">
+    Información de usuario # {{ users.documentNumber }}
+  </span>
+</ng-template>

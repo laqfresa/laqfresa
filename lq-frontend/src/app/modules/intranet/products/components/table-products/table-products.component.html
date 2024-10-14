@@ -1,0 +1,137 @@
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <div nz-row class="titleTable">
+      <div nz-col nzSpan="24">
+        <h1>
+          Productos La Q'Fresa
+        </h1>
+      </div>
+    </div>
+    <nz-card>
+      <div nz-row>
+        <div nz-col nzSpan="24" class="containerBtnAdd">
+          <button
+          nz-button
+          nzType="primary"
+          class="btnAdd"
+          [disabled]="loadingProducts"
+          (click)="showModalCreated()"
+          >
+          <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <nz-table 
+      #productsTable 
+      [nzData]="productsMap" 
+      [nzLoading]="loadingProducts"
+      [nzBordered]="true"
+      [nzScroll]="{ x: '200px', y: '300px' }">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Producto</th>
+            <th nzWidth="100px">Precio</th>
+            <th nzWidth="100px" >Salsas</th>
+            <th nzWidth="100px">Capas</th>
+            <th nzWidth="100px">Toppings Premium</th>
+            <th nzWidth="100px">Toppings Clásicos</th>
+            <th nzWidth="100px">Estado</th>
+            <th nzWidth="90px" nzRight>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of productsTable.data">
+            <td >{{ product.name }}</td>
+            <td >{{ product.value | currency }}</td>
+            <td>
+              <span nz-col nzSpan="24" *ngFor="let salsa of product.salsas">
+                {{ salsa.ingredient?.name }} ({{ salsa.quantity }})
+              </span>
+            </td>
+            <td>
+              <span nz-col nzSpan="24" *ngFor="let capa of product.capas">
+                {{ capa.ingredient?.name }} ({{ capa.quantity }})
+              </span>
+            </td>
+            <td>
+              <span nz-col nzSpan="24" *ngFor="let toppingPremium of product.toppingsPremium">
+                {{ toppingPremium.ingredient?.name }} ({{ toppingPremium.quantity }})
+              </span>
+            </td>
+            <td>
+              <span nz-col nzSpan="24" *ngFor="let toppingClasic of product.toppingsClasic">
+                {{ toppingClasic.ingredient?.name }} ({{ toppingClasic.quantity }})
+              </span>
+            </td>
+            <td>
+              <span nz-col nzSpan="24">
+                {{ product.status }}
+              </span>
+            </td>
+            <td nzRight>
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  (click)="showModal(product)">
+                    <span nz-icon nzType="eye" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  (click)="showModalEdit(product)">
+                    <span nz-icon nzType="edit" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  nz-popconfirm
+                  nzPopconfirmTitle="¿Estas seguro de cambiar el estado del producto?"
+                  nzPopconfirmPlacement="top"
+                  (nzOnConfirm)="changeStatus(product.idProduct)">
+                    <span nz-icon nzType="reload" nzTheme="outline" style="color: #19477c;"></span>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>  
+    </nz-card>
+  </div>
+</div>
+
+<app-modal-info-product
+[isVisible]="isvisibleModal"
+[productMap]="productModal"
+(hideModalEmitter)="hideModalInfo($event)">
+</app-modal-info-product>
+
+<app-modal-edit-product
+*ngIf="isVisibleModalEdit"
+[productEdit]="productEdit"
+[isVisible]="isVisibleModalEdit"
+[premiums]="premium"
+[sauces]="sauces"
+[tClasics]="clasic"
+[capas]="capas"
+[sizes]="sizes"
+[loadingUpdate]="loadingUpdate"
+(hideModalEmit)="hideModalEdit()"
+(updateProductEmitter)="updateProduct($event)">
+</app-modal-edit-product>
+
+<app-modal-add-product
+*ngIf="isVisibleModalAdd"
+[isVisible]="isVisibleModalAdd"
+[premiums]="premium"
+[sauces]="sauces"
+[tClasics]="clasic"
+[capas]="capas"
+[sizes]="sizes"
+[loadingUpdate]="loadingUpdate"
+(hideModalEmit)="hideModalCreated()"
+(updateProductEmitter)="createProduct($event)">
+</app-modal-add-product>

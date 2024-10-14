@@ -1,0 +1,82 @@
+<div nz-row >
+  <div nz-col nzSpan="24">
+    <div nz-row class="titleTable">
+      <div nz-col nzSpan="24">
+        <h1>
+          Combos La Q'Fresa
+        </h1>
+      </div>
+    </div>
+    <nz-card>
+      <div nz-row>
+        <div nz-col nzSpan="24" class="containerBtnAdd">
+          <button
+          nz-button
+          nzType="primary"
+          class="btnAdd"
+          [disabled]="false"
+          
+          >
+          <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <nz-table 
+      #basicTable 
+      [nzData]="allCombos" 
+      [nzLoading]="loadingCombos"
+      [nzBordered]="true"
+      [nzScroll]="{ x: '200px', y: '300px' }">
+        <thead>
+          <tr>
+            <th nzWidth="150px">Nombre del Combo</th>
+            <th nzWidth="140px">Descripción</th>
+            <th nzWidth="100px">Valor</th>
+            <th nzWidth="100PX">Estado</th>
+            <th nzWidth="180PX">Productos</th>
+            <th nzWidth="90PX" nzRight>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let combo of basicTable.data">
+            <td>{{ combo.name }}</td>
+            <td>{{ combo.description }}</td>
+            <td>({{ combo.value | currency}})</td>
+            <td>{{ combo.status }}</td>
+            <td>
+              <div *ngFor="let detail of combo.detailCombos">
+                <span>
+                  <h3 *ngFor="let product of detail.products">
+                    {{ product.name }} - ({{ product.value | currency}})
+                  </h3>
+                </span>
+              </div>
+            </td>
+            <td nzRight>
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  >
+                    <span nz-icon nzType="edit" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  nz-popconfirm
+                  nzPopconfirmTitle="¿Estas seguro de cambiar el estado del producto?"
+                  nzPopconfirmPlacement="top"
+                  (nzOnConfirm)="changeStatusCombo(combo.idCombo)"
+                  >
+                    <span nz-icon nzType="reload" nzTheme="outline" style="color: #19477c;"></span>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</div>

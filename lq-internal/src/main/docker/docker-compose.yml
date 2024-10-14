@@ -1,0 +1,17 @@
+services:
+  quarkus:
+    image: lq-internal:latest
+    environment:
+      JAVA_OPTS_APPEND: '-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus-profile=docker'
+      MYSQL_USERNAME_LQFRESA: lqfresabd-desarrollo1
+      MYSQL_PASSWORD_LQFRESA: lqfresa12*
+      MYSQL_URL_LQFRESA: '35.232.160.40:3306'
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: lq-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - quarkus

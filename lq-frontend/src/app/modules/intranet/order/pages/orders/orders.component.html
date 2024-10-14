@@ -1,0 +1,38 @@
+<div nz-row nzSpan="24" *ngIf="loadingOrders">
+  <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24">
+    <app-loading-box [loadingText]="'Cargando'"></app-loading-box> 
+  </div>
+</div>
+<nz-card *ngIf="!loadingOrders" style="margin-bottom: 20%;">
+  <div nz-row *ngIf="!renderPageDetail">
+    <div nz-col nzSpan="24">
+      <nz-card *ngFor="let order of ordersPending " style="margin-bottom: 10px;">
+        <div nz-row>
+          <div nz-col nzSpan="18">
+            #{{ order.idOrder }}
+          </div>
+          <div nz-col nzSpan="6">
+            {{ order.detailOrders.length }} Productos
+          </div>
+        </div>
+        <div nz-row>
+          <div nz-col nzSpan="18">
+            <span nz-col nzSpan="24">
+              Fecha/Hora:
+            </span>
+              {{ order.creationDate | date:'dd/MM/yyyy HH:mm:ss' }}
+          </div>
+          <div nz-col nzSpan="6">
+           <button
+           nz-button
+           nzType="primary"
+           (click)="viewOrderDetail(order.idOrder)">
+            Tomar
+           </button>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+ 
+</nz-card>

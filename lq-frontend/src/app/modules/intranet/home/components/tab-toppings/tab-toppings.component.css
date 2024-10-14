@@ -1,0 +1,20 @@
+.nameProduct {
+  font-size: large;
+  color: var(--color-neutral-black);
+}
+.containerBtnToppings {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+}
+
+.btnAcceptToppings {
+  background-color: var(--color-secondary-green-base);
+}
+
+.containerName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,0 +1,69 @@
+
+.menuBackground {
+  background-color: #646d674d;
+  height: 200vh;
+  width: 200vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1100;
+}
+
+.menuContainerAnimIN {
+  background-color: white;
+  height: 100%;
+  width: min(65vw, 500px);
+  position: fixed;
+  top: 0;
+  z-index: 1100;
+  left: -65vw;
+  animation: showSideMenuAnim 0.7s forwards;
+}
+
+.menuContainerAnimOUT {
+    background-color: white;
+    height: 100%;
+    width: min(65vw, 500px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    animation: hideSideMenuAnim 0.7s forwards;
+}
+
+.containerOptionsMenu {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.containerPhotoProfile {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.containerInfouser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.infoUser {
+  width: 80%;
+  border-radius: 20px;
+  color: var(--color-neutral-white);
+  background-color: var(--color-primary-blue);
+}
+
+.btnLogout {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-top: 15%;
+}

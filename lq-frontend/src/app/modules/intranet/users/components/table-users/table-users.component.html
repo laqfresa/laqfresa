@@ -1,0 +1,123 @@
+<div nz-row >
+  <div nz-col nzSpan="24">
+    <div nz-row class="titleTable">
+      <div nz-col nzSpan="24">
+        <h1>
+          Usuarios La Q'Fresa
+        </h1>
+      </div>
+    </div>
+    <nz-card>
+      <div nz-row>
+        <div nz-col nzSpan="24" class="containerBtnAdd">
+          <button
+          nz-button
+          nzType="primary"
+          class="btnAdd"
+          [disabled]="loadingUsers"
+          (click)="showModalCreated()"
+          >
+          <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <nz-table 
+      #usersTable 
+      [nzData]="users" 
+      [nzLoading]="loadingUsers"
+      [nzBordered]="true"
+      [nzScroll]="{ x: '200px', y: '300px' }">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Tipo Documento</th>
+            <th nzWidth="100px">Número Documento</th>
+            <th nzWidth="100px">Nombre</th>
+            <th nzWidth="100px">Rol</th>
+            <th nzWidth="100px">Telefono</th>
+            <th nzWidth="100px">Email</th>
+            <th nzWidth="100px">Dirección</th>
+            <th nzWidth="100px">Género</th>
+            <th nzWidth="100px">Contraseña</th>
+            <th nzWidth="100px">Estado</th>
+            <th nzWidth="90px" nzRight>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let users of usersTable.data">
+            <td>{{ users.documentTypeId.name }}</td>
+            <td>{{ users.documentNumber }}</td>
+            <td>{{ getFullName(users) }}</td>
+            <td>{{ users.userType.name }}</td>
+            <td>{{ users.phone }}</td>
+            <td>{{ users.email }}</td>
+            <td>{{ users.address }}</td>
+            <td>{{ users.gender.name }}</td>
+            <td>{{ users.password }}</td>
+            <td>
+              <span nz-col nzSpan="24">
+                {{ users.userStatus.name }}
+              </span>
+            </td>
+            <td nzRight>
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  (click)="showModal(users)">
+                    <span nz-icon nzType="eye" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  (click)="showModalEdit(users)">
+                    <span nz-icon nzType="edit" nzTheme="twotone" nzTwotoneColor="#19477c"></span>
+                  </button>
+                </div>
+                <div nz-col nzSpan="24">
+                  <button
+                  nz-button
+                  nz-popconfirm
+                  nzPopconfirmTitle="¿Estas seguro de cambiar el estado del usuario"
+                  nzPopconfirmPlacement="top">
+                    <span nz-icon nzType="reload" nzTheme="outline" style="color: #19477c;"></span>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>  
+    </nz-card>
+  </div>
+</div>
+
+<app-modal-edit-users
+*ngIf="isVisibleModalEdit"
+[usersEdit]="usersEdit"
+[typeUser]="typeUser"
+[gender]="gender"
+[documentType]="documentType"
+[userStatus]="userStatus"
+[isVisible]="isVisibleModalEdit"
+(hideModalEmit)="hideModalEdit()"
+(updateUserEmitter)="updateUser($event)">
+</app-modal-edit-users>
+
+<app-modal-info-users
+[isVisible]="isvisibleModal"
+[users]="usersModal"
+(hideModalEmitter)="hideModalInfo($event)">
+</app-modal-info-users>
+
+<app-modal-add-users
+*ngIf="isVisibleModalAdd"
+[isVisible]="isVisibleModalAdd"
+[typeUser]="typeUser"
+[gender]="gender"
+[documentType]="documentType"
+[userStatus]="userStatus"
+[loadingUpdate]="loadingUpdate"
+(hideModalEmit)="hideModalCreated()"
+(createUserEmitter)="createUser($event)">
+</app-modal-add-users>

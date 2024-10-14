@@ -1,0 +1,12 @@
+*
+# Incluir directorios necesarios
+!target/quarkus-app/
+!target/quarkus-app/**
+!target/quarkus-app/lib/
+!target/quarkus-app/*.jar
+!target/quarkus-app/app/
+!target/quarkus-app/quarkus/
+
+# Incluye el archivo pom.xml para que esté disponible en el contexto de construcción
+!pom.xml
+!src/

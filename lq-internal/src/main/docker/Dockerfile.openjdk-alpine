@@ -1,0 +1,106 @@
+#Imagen usada para la creación del Docker
+ARG IMAGE_BASE=alpine:latest
+
+#Descripcion de los argumentos para seguridad
+ARG JAVA_SEC=" -Djava.security.egd=file:/dev/./urandom "
+
+#Puerto microservicio Quarkus
+ARG PORT_OUT_SERVICE=8080
+
+#Puerto debug
+ARG PORT_DEBUG=5005
+
+#------------------------------------------------------------------------------------------------------------------------------
+
+#                                               INICIO STAGE BUILD DOCKER
+#------------------------------------------------------------------------------------------------------------------------------
+#                                                   INICIO Stage 'BASE'
+#------------------------------------------------------------------------------------------------------------------------------
+
+FROM ${IMAGE_BASE} AS base
+
+RUN apk add --no-cache openjdk17
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk/
+ENV PATH=$PATH:$JAVA_HOME/bin
+
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
+
+#Carpeta de trabajo y principal para el uso de nuestro docker
+WORKDIR /deployments
+
+#Copia de los archivos inmutables, necesarios Quarkus
+COPY target/quarkus-app/lib/ /deployments/lib/
+COPY target/quarkus-app/app/ /deployments/app/
+COPY target/quarkus-app/quarkus/ /deployments/quarkus/
+
+#Puerto microservicio Quarkus
+EXPOSE ${PORT_OUT_SERVICE}
+
+#Copia el archivo jar y lo envia a la carpeta /deployments
+COPY target/quarkus-app/*.jar /deployments/
+
+# Variables de ambiente
+ENV JAVA_K8S=" -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 "
+ENV JAVA_SEC=" -Djava.security.egd=file:/dev/./urandom "
+ENV JAVA_LOG=" -Dquarkus.http.host=0.0.0.0 -Duser.timezone=America/Bogota -Djava.util.logging.manager=org.jboss.logmanager.LogManager "
+
+#Ejecucion en linea de comando dentro del docker
+ENTRYPOINT [ "sh", "-c", "java $JAVA_LOG $JAVA_K8S $JAVA_SEC -jar /deployments/quarkus-run.jar" ]
+
+#------------------------------------------------------------------------------------------------------------------------------
+#                                                     FIN Stage 'BASE'
+#                                                   INICIO Stage 'PROFILING'
+#------------------------------------------------------------------------------------------------------------------------------
+FROM base AS profiling
+
+#Puerto JMX
+ARG PORT_JMX_EXPORTER=9779
+EXPOSE ${PORT_JMX}
+
+
+#Configuracion JMX_EXPORTER
+ARG JMX_CONFIG=jmx_exporter_config.yml
+
+
+#Copia el archivo de configuracion JMX Exporter
+#COPY ${JMX_CONFIG} /deployments
+
+#Exportador de JMX a Prometheus
+ARG JMX_PROMETHEUS=jmx_prometheus_javaagent-0.17.2.jar
+
+#Descarga el exportador de JMX a Prometheus
+#RUN curl https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.17.2/${JMX_PROMETHEUS} -o /deployments/${JMX_PROMETHEUS}
+RUN wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.17.2/${JMX_PROMETHEUS}
+
+#Obtiene el archivo jmx_exporter_config
+RUN wget https://raw.githubusercontent.com/vc-soft/he-public/main/jmx_exporter_config.yml
+
+ENV JAVA_JMX_EXPORTER_AGENT="-javaagent:./${JMX_PROMETHEUS}=${PORT_JMX_EXPORTER}:${JMX_CONFIG} "
+
+ENV JAVA_PRF=" -Dcom.sun.management.jmxremote.rmi.port=8088 \
+-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=8088 \
+-Dcom.sun.management.jmxremote.ssl=false \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.local.only=false \
+-Djava.rmi.server.hostname=0.0.0.0 "
+
+ENTRYPOINT [ "sh", "-c", "java $JAVA_LOG $JAVA_K8S $JAVA_SEC $JAVA_PRF $JAVA_JMX_EXPORTER_AGENT -jar /deployments/quarkus-run.jar"]
+
+
+#------------------------------------------------------------------------------------------------------------------------------
+#                                                     FIN Stage 'PROFILING'
+#                                                   INICIO Stage 'AOT'
+#------------------------------------------------------------------------------------------------------------------------------
+
+FROM base AS aot
+ENV JAVA_AOT=" -Xshareclasses:name=cacheapp,cacheDir=/tmp/cache,nonfatal "
+ENTRYPOINT [ "sh", "-c", "java $JAVA_LOG $JAVA_AOT $JAVA_K8S $JAVA_SEC -jar /deployments/quarkus-run.jar" ]
+
+#------------------------------------------------------------------------------------------------------------------------------
+#                                                     FIN Stage 'AOT'
+#                                                   INICIO Stage 'RELEASE'
+#------------------------------------------------------------------------------------------------------------------------------
+
+FROM aot AS release
+ENTRYPOINT [ "sh", "-c", "java $JAVA_LOG $JAVA_AOT $JAVA_K8S $JAVA_SEC -jar /deployments/quarkus-run.jar" ]

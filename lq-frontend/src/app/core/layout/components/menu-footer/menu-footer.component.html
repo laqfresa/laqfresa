@@ -1,0 +1,70 @@
+<div class="centerContent footerContent">
+  <div nz-row style="height: 100%;">
+    <div nz-col nzSpan="4.8">
+      <button nz-button nzType="default" nz-row class="optionMenuButton" (click)="showMenu()">
+        <span nz-icon class="menuIcon" nzType="menu-unfold"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Menú</span></div>
+      </button>
+    </div>
+    <div nz-col nzSpan="4.8">
+      <button 
+      nz-button 
+      nzType="default" 
+      nz-row 
+      class="optionMenuButton"
+      [routerLink]="['/', 'intranet', 'home' ]"
+      routerLinkActive="active"
+      >
+        <span nz-icon class="menuIcon" nzType="home"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Inicio</span></div>
+      </button>
+    </div>
+    <div nz-col nzSpan="4.8" *ngIf="role === roles._ADMIN_">
+      <button 
+      nz-button 
+      nzType="default" 
+      nz-row 
+      class="optionMenuButton"
+      [routerLink]="['/', 'intranet', 'products' ]"
+      routerLinkActive="active">
+        <span nz-icon class="menuIcon" nzType="coffee"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Productos</span></div>
+      </button>
+    </div>
+    <div nz-col nzSpan="4.8" *ngIf="role === roles._ADMIN_">
+      <button 
+      nz-button 
+      nzType="default" 
+      nz-row 
+      class="optionMenuButton"
+      [routerLink]="['/', 'intranet', 'toppings' ]"
+      routerLinkActive="active">
+        <span nz-icon class="menuIcon" nzType="shop"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Toppings</span></div>
+      </button>
+    </div>
+    <div nz-col nzSpan="4.8" *ngIf="role === roles._ADMIN_">
+      <button nz-button 
+      nzType="default" 
+      nz-row 
+      class="optionMenuButton"
+      [routerLink]="['/', 'intranet', 'historic-sale' ]"
+      routerLinkActive="active">
+        <span nz-icon class="menuIcon" nzType="mail"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Historico</span></div>
+      </button>
+    </div>
+    <div nz-col nzSpan="4.8" *ngIf="role === roles._WAITER_">
+      <button 
+      nz-button 
+      nzType="default" 
+      nz-row 
+      class="optionMenuButton"
+      [routerLink]="['/', 'intranet', 'orders' ]"
+      routerLinkActive="active">
+        <span nz-icon class="menuIcon" nzType="dollar"></span>
+        <div nz-col nzSpan="24"><span class="footerText">Pedidos</span></div>
+      </button>
+    </div>
+  </div>
+</div>

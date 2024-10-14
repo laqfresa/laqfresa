@@ -1,0 +1,225 @@
+<nz-modal
+  [nzVisible]="isVisible"
+  [nzTitle]="titleModal"
+  nzCentered
+  nzWidth="600px"
+  [nzClosable]="false">
+  <ng-container *nzModalContent="">
+    <form [formGroup]="editForm" (ngSubmit)="submitForm()">
+      <div nz-row nzGutter="16">
+        
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="documentTypeId">Tipo de Documento</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+                formControlName="documentTypeId"
+                nzPlaceHolder="Seleccione el tipo de documento"
+              >
+                <nz-option *ngFor="let item of documentType" [nzLabel]="item.name" [nzValue]="item.idTypeDocument"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="documentNumber">Número de Documento</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="documentNumber"
+              name="documentNumber" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="firstName">Primer Nombre</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="firstName"
+              name="firstName" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="secondName">Segundo Nombre</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="secondName"
+              name="secondName" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="firstLastName">Primer Apellido</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="firstLastName"
+              name="firstLastName" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="secondLastName">Segundo Apellido</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="secondLastName"
+              name="secondLastName" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="userType">Tipo de Usuario</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+                formControlName="userType"
+                nzPlaceHolder="Seleccione el tipo de usuario"
+              >
+                <nz-option *ngFor="let item of typeUser" [nzLabel]="item.name" [nzValue]="item.idTypeUser"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="phone">Teléfono</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="phone"
+              name="phone" 
+              nzType="text"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="email">Email</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="email"
+              name="email" 
+              nzType="email"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="address">Dirección</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="address"
+              name="address" 
+              nzType="text"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="gender">Género</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+                formControlName="gender"
+                nzPlaceHolder="Seleccione el género"
+              >
+                <nz-option *ngFor="let item of gender" [nzLabel]="item.name" [nzValue]="item.idGender"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="password">Contraseña</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="password"
+              name="password" 
+              nzType="password"
+               />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="userStatus">Estado del Usuario</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+                formControlName="userStatus"
+                nzPlaceHolder="Seleccione el estado del usuario"
+              >
+                <nz-option *ngFor="let item of userStatus" [nzLabel]="item.name" [nzValue]="item.idStatusUser"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+    </form>
+  </ng-container>
+  
+  <!-- BOTONES MODAL -->
+  <ng-container *nzModalFooter>
+    <div nz-row style="display: flex; justify-content: space-around;">
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary"
+        (click)="hideModal()">
+        Cancelar
+      </button>
+      </div>
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary" 
+        [disabled]="!editForm.valid"
+        (click)="updateUser()">
+        Aceptar
+      </button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-template #titleModal>
+  <span style="font-size: 24px; color: white;">
+    Editar usuario # {{ usersEdit.documentNumber }}
+  </span>
+</ng-template>

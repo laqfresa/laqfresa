@@ -1,0 +1,128 @@
+<nz-modal
+[(nzVisible)]="isVisible"
+nzCentered
+[nzClosable]="true"
+nzWidth="100%"
+(nzOnCancel)="hideModal()">
+  <ng-container *nzModalContent>
+    <div nz-row *ngIf="loadingCreate">
+      <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24">
+        <app-loading-box [loadingText]="'Cargando'"></app-loading-box> 
+      </div>
+    </div>
+    <nz-card
+    *ngIf="!loadingCreate"
+    nzTitle="Resumen del pedido">
+      <div nz-row nzGutter="16" class="headTable">
+        <div nz-col nzSpan="6" class="centerContent head">
+          Producto
+        </div>
+        <div nz-col nzSpan="6" class="centerContent head">
+          Precio
+        </div>
+        <div nz-col nzSpan="6" class="centerContent head">
+          Cantidad
+        </div>
+        <div nz-col nzSpan="6" class="centerContent head">
+          Total
+        </div>
+      </div>
+      <div nz-row nzGutter="16" *ngFor="let product of resumeOrder.detailOrders; let i = index">
+        <div nz-col nzSpan="6" class="centerContent content">
+          <div>
+            <span 
+            nz-popconfirm
+            nzPopconfirmTitle="¿Estas seguro de eliminar el producto?"
+            nzPopconfirmPlacement="top"
+            (nzOnConfirm)="deleteProduct(i)"
+            nz-icon 
+            nzType="delete" 
+            nzTheme="outline"
+            ></span>
+            <span 
+            nz-popconfirm
+            nzPopconfirmTitle="¿Estas seguro de editar el producto?"
+            nzPopconfirmPlacement="top"
+            (nzOnConfirm)="editProduct(product, i); "
+            nz-icon 
+            nzType="edit" 
+            nzTheme="outline"></span>
+          </div>
+          {{ product.nameProduct }}
+        </div>
+        <div nz-col nzSpan="6" class="centerContent content" style="color: #3F8600;">
+          $ {{ product.value | number }}
+        </div>
+        <div nz-col nzSpan="6" class="centerContent content">
+          {{ product.quantity | number }}
+        </div>
+        <div nz-col nzSpan="6" class="centerContent content" style="color: #3F8600;">
+          $ {{ product.value * product.quantity  | number}}
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <div nz-row nzGutter="16" class="containerResults">
+        <div nz-col nzSpan="12">
+            Adicionales:
+        </div>
+        <div nz-col nzSpan="12">
+          $ {{ resumeOrder.valuOfAditional || 0 | number }}
+        </div>
+      </div>
+      <div nz-row nzGutter="16" class="containerResults">
+        <div nz-col nzSpan="12">
+            SubTotal:
+        </div>
+        <div nz-col nzSpan="12">
+          $ {{ resumeOrder.subTotal || 0 | number }}
+        </div>
+      </div>
+      <div nz-row nzGutter="16" class="containerResults">
+        <div nz-col nzSpan="12">
+            Descuento:
+        </div>
+        <div nz-col nzSpan="12">
+          $ {{  resumeOrder.discont || 0 | number}}
+        </div>
+      </div>
+      <div nz-row nzGutter="16" class="containerResults">
+        <div nz-col nzSpan="12">
+            Total:
+        </div>
+        <div nz-col nzSpan="12">
+          $ {{ (resumeOrder.totalOrder || 0) | number }}
+        </div>
+      </div>
+    </nz-card>
+  </ng-container>
+  
+  <ng-container *nzModalFooter="">
+    <div nz-row nzGutter="16" class="containerBtns">
+      <div nz-col>
+        <button
+        nz-button
+        [disabled]="loadingCreate"
+        nz-popconfirm
+        nzPopconfirmTitle="¿Estas seguro de eliminar el pedido?"
+        nzPopconfirmPlacement="top"
+        (nzOnConfirm)="resetVariables(false)">
+          Eliminar
+        </button>
+      </div>
+      <div nz-col>
+        <button
+        nz-button
+        [disabled]="!okOrder"
+        nzType="primary"
+        nz-popconfirm
+        nzPopconfirmTitle="¿Estas seguro de crear el pedido?"
+        nzPopconfirmPlacement="top"
+        (nzOnConfirm)="createOrder(resumeOrder)">
+          Crear pedido
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

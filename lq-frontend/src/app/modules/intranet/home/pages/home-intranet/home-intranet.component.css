@@ -1,0 +1,11 @@
+.buttonResume {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 3%;
+}
+
+.nameProduct {
+  font-size: large;
+  color: var(--color-neutral-black);
+}

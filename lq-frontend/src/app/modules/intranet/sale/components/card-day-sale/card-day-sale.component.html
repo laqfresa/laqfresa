@@ -1,0 +1,20 @@
+<div nz-row style="margin: 10px;">
+  <div nz-col nzSpan="24" >
+    <nz-card nzTitle="Ventas diarias" [nzLoading]="loadingSales">
+      <div nz-row nzGutter="16" >
+        <div nz-col nzSpan="24" class="containerDate">
+          <span> {{ sale.date | date }} </span>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="sale.totalDailySales">
+          <nz-statistic
+          [nzValue]="( sale.totalDailySales | currency)!"
+          [nzValueStyle]="{ color: '#3F8600' }"
+          ></nz-statistic>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="!sale.totalDailySales">
+         <span>No se encontrarón ventas</span>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>
