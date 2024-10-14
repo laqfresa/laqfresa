@@ -1,0 +1,15 @@
+<div nz-row style="margin: 10px;">
+  <div nz-col nzSpan="24" *ngIf="sale">
+    <nz-card nzTitle="Ventas rango" [nzLoading]="loadingSales">
+      <nz-statistic
+      [nzValue]="( sale | currency)!"
+      [nzValueStyle]="{ color: '#3F8600' }"
+      ></nz-statistic>
+    </nz-card>
+  </div>
+  <div nz-col nzSpan="24" *ngIf="!sale">
+    <nz-card nzTitle="Ventas rango" [nzLoading]="loadingSales">
+      <span>No se encontrarón ventas</span>
+    </nz-card>
+  </div>
+</div>
