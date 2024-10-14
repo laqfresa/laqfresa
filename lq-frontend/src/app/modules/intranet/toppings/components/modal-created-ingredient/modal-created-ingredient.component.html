@@ -1,0 +1,84 @@
+<nz-modal
+[nzVisible]="isVisible"
+[nzTitle]="titleModal"
+nzCentered
+nzWidth="600px"
+[nzClosable]="false"
+>
+  <ng-container *nzModalContent>
+    <div nz-row nzSpan="24" *ngIf="loadingUpdate">
+      <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24">
+        <app-loading-box [loadingText]="'Cargando'"></app-loading-box> 
+    </div>
+    </div>
+    <form [formGroup]="editIngredient" *ngIf="!loadingUpdate" >
+      <div nz-row nzGutter="16">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="name">Nombre</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <input 
+              nz-input 
+              formControlName="name"
+              name="name" 
+              nzType="text"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="type">Tipo de ingrediente</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              formControlName="type"
+              >
+                <nz-option *ngFor="let item of typeIngredients" [nzLabel]="item.name" [nzValue]="item.ingredientTypeId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>        
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="status">Estado</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <nz-select
+              formControlName="status"
+              >
+                <nz-option *ngFor="let item of status" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>        
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <div nz-row style="display: flex; justify-content: space-around;">
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary"
+        (click)="hideModal()"
+        [disabled]="loadingUpdate">
+        Cancelar
+      </button>
+      </div>
+      <div nz-col>
+        <button
+        nz-button
+        nzType="primary"
+        (click)="addIngredient()"
+        [disabled]="editIngredient.invalid || loadingUpdate">
+        Aceptar
+      </button>
+      </div>
+    </div>
+  </ng-container>  
+</nz-modal>
+
+<ng-template #titleModal>
+  <span style="font-size: 24px; color: white;">
+    Crear ingrediente
+  </span>
+</ng-template>

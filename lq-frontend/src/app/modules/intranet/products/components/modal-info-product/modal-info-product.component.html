@@ -1,0 +1,75 @@
+<nz-modal
+[nzVisible]="isVisible"
+[nzTitle]="titleModal"
+nzCentered
+[nzClosable]="false">
+  <ng-container *nzModalContent="">
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <h2>{{ productMap.name }}</h2>
+      </div>
+      <nz-card class="cardInfo" nz-col nzSpan="24">
+        <div nz-row nzGutter="12">
+          <div nz-col nzSpan="12">
+            <span>{{ productMap.description }}</span>
+            <h3>Valor: <span class="value">{{ productMap.value | currency }}</span></h3>
+          </div>
+          <div nz-col nzSpan="10">
+            <h3># Toppings Premium: <span>{{ productMap.quantityPremium }}</span> </h3>
+            <h3># Toppings Clásicos: <span>{{ productMap.quantityClasic }}</span></h3>
+            <h3># Salsas: <span>{{ productMap.quantitySalsa }}</span></h3>
+          </div>
+        </div>
+      </nz-card>
+      <nz-card class="cardInfo" nz-col nzSpan="24" *ngIf="productMap.salsas.length > 0">
+        <h3>Salsas:</h3>
+        <div nz-row>
+          <div nz-col nzSpan="8" *ngFor="let salsa of productMap.salsas">
+            {{ salsa.ingredient?.name }} ({{ salsa.quantity }})
+          </div>
+        </div>
+      </nz-card>
+      <nz-card class="cardInfo" nz-col nzSpan="24" *ngIf="productMap.capas.length > 0">
+        <h3>Capas:</h3>
+        <div nz-row>
+          <div nz-col nzSpan="8" *ngFor="let capa of productMap.capas">
+            {{ capa.ingredient?.name }} ({{ capa.quantity }})
+          </div>
+        </div>
+      </nz-card>
+      <nz-card class="cardInfo" nz-col nzSpan="24" *ngIf="productMap.toppingsPremium.length > 0">
+        <h3>Toppings Premium:</h3>
+        <div nz-row>
+          <div nz-col nzSpan="8" *ngFor="let toppingPremium of productMap.toppingsPremium">
+            {{ toppingPremium.ingredient?.name }} ({{ toppingPremium.quantity }})
+          </div>
+        </div>
+      </nz-card>
+      <nz-card class="cardInfo" nz-col nzSpan="24" *ngIf="productMap.toppingsClasic.length > 0">
+        <h3>Toppings Clásicos:</h3>
+        <div nz-row>
+          <div nz-col nzSpan="8" *ngFor="let toppingClasic of productMap.toppingsClasic">
+            {{ toppingClasic.ingredient?.name }} ({{ toppingClasic.quantity }})
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <div nz-row class="centerContent">
+      <button
+      class="btnOk"
+      nz-button
+      nzType="primary"
+      (click)="hideModalEmit()">
+        OK
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-template #titleModal>
+  <span style="font-size: 24px; color: white;">
+    Info producto # {{ productMap.idProduct }}
+  </span>
+</ng-template>

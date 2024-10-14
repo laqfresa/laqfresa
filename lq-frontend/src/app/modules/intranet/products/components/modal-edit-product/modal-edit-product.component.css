@@ -1,0 +1,10 @@
+.containerCant {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnOk {
+  width: 150px;
+  height: 45px;
+}

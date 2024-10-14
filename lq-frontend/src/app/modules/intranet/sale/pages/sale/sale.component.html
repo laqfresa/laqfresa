@@ -1,0 +1,173 @@
+<nz-card>
+  <div nz-row>
+    <div nz-col nzSpan="24" class="centerContent">
+      <h1>Ventas La Q'Fresa</h1>
+    </div>
+  </div>
+  <div nz-row nzGutter="16" class="centerContent">
+    <div
+      nz-col
+      [nzXs]="24"
+      [nzSm]="24"
+      [nzMd]="24"
+      [nzLg]="24"
+      [nzXl]="24"
+      class="containerBtn"
+    >
+      <button
+        nz-button
+        nzType="primary"
+        class="btnFilters"
+        style="width: 100%;"
+        (click)="getTotalSale()"
+      >
+        Ventas Totales
+      </button>
+    </div>
+    <div
+      nz-col
+      [nzXs]="12"
+      [nzSm]="12"
+      [nzMd]="6"
+      [nzLg]="6"
+      [nzXl]="6"
+      class="containerBtn"
+    >
+      <button
+        nz-button
+        nzType="primary"
+        class="btnFilters"
+        (click)="getDaySales()"
+      >
+        Ventas Diarias
+      </button>
+    </div>
+    <div
+      nz-col
+      [nzXs]="12"
+      [nzSm]="12"
+      [nzMd]="6"
+      [nzLg]="6"
+      [nzXl]="6"
+      class="containerBtn"
+    >
+      <button
+        nz-button
+        nzType="primary"
+        class="btnFilters"
+        (click)="getWeekSales()"
+      >
+        Ventas Semanales
+      </button>
+    </div>
+    <div
+      nz-col
+      [nzXs]="12"
+      [nzSm]="12"
+      [nzMd]="6"
+      [nzLg]="6"
+      [nzXl]="6"
+      class="containerBtn"
+    >
+      <button
+        nz-button
+        nzType="primary"
+        class="btnFilters"
+        (click)="getMonthSales()"
+      >
+        Ventas Mensuales
+      </button>
+    </div>
+    <div
+      nz-col
+      [nzXs]="12"
+      [nzSm]="12"
+      [nzMd]="6"
+      [nzLg]="6"
+      [nzXl]="6"
+      class="containerBtn"
+    >
+      <button
+        nz-button
+        nzType="primary"
+        class="btnFilters"
+        (click)="activatedFilters()"
+      >
+        Filtrar
+      </button>
+    </div>
+  </div>
+  <form nz-form [formGroup]="dateRangeForm" *ngIf="visibleFilter">
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzFor="email">
+            Fecha Inicial
+          </nz-form-label>
+          <nz-form-control [nzSpan]="24">
+            <input
+              nz-input
+              name="startDate"
+              type="date"
+              id="startDate"
+              formControlName="startDate"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzFor="email">Fecha Final</nz-form-label>
+          <nz-form-control [nzSpan]="24">
+            <input
+              nz-input
+              name="endDate"
+              type="date"
+              id="endDate"
+              formControlName="endDate"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="btnFilter">
+        <button nz-button nzType="primary" (click)="getRankSales()" [disabled]="dateRangeForm.invalid">
+          Filtrar
+        </button>
+      </div>
+    </div>
+  </form>
+  <app-card-total-sales
+    *ngIf="indexCardName === typesCardsSales._05_TOTAL_"
+    [sales]="sales"
+    [loadingSales]="loadingSale"
+  >
+  </app-card-total-sales>
+
+  <app-card-day-sale
+    *ngIf="indexCardName === typesCardsSales._01_VENTA_DIARIA_"
+    [loadingSales]="loadingSale"
+    [sale]="salesDay"
+  >
+  </app-card-day-sale>
+
+  <app-card-filter-sales
+    *ngIf="indexCardName === typesCardsSales._04_RANGOS_"
+    [loadingSales]="loadingSale"
+    [sale]="salesFilter"
+  >
+  </app-card-filter-sales>
+
+  <app-card-month-sales
+    *ngIf="indexCardName === typesCardsSales._03_VENTA_MENSUAL_"
+    [loadingSales]="loadingSale"
+    [sale]="salesMoth"
+  >
+  </app-card-month-sales>
+
+  <app-card-week-sales
+    *ngIf="indexCardName === typesCardsSales._02_VENTA_SEMANAL_"
+    [loadingSales]="loadingSale"
+    [sale]="salesWeek"
+  >
+  </app-card-week-sales>
+</nz-card>
